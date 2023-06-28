@@ -1,0 +1,12 @@
+{
+    "name": "Generating cover letter",
+    "version": "1.0.0",
+    "description": "This is an extension to generate a cover letter based on work experience and job description.",
+    "manifest_version": 3,
+    "author": "Harsh Gandhi",
+    "action": {
+        "default_popup": "index.html",
+        "default_title": "Generating cover letter"
+    }
+
+}
