@@ -1,12 +1,29 @@
 {
-    "name": "Generating cover letter",
+    "name": "Cover Letter Genrator",
     "version": "1.0.0",
     "description": "This is an extension to generate a cover letter based on work experience and job description.",
     "manifest_version": 3,
-    "author": "Harsh Gandhi",
+    "author": "Harsh Gandhi, Kevin Rodriguez, Momoreoluwa Ayinde ",
+      "permissions": ["storage", "activeTab", "scripting", "tabs", "tabGroups","declarativeContent"],
+    "background": {
+        "service_worker": "background.js"
+      },
     "action": {
         "default_popup": "index.html",
-        "default_title": "Generating cover letter"
+        "default_title": "Generating cover letter",
+        "default_icon": {
+            "16": "images/icon16.png",
+            "48": "images/icon48.png",
+            "128": "images/icon128.png"
+          }
+    },
+    "icons": {
+        "16": "images/icon16.png",
+        "48": "images/icon48.png",
+        "128": "images/icon128.png"
     }
 
 }
+
+
+

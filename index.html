@@ -5,20 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Extension</title>
+    <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-    <div>
-        <h2>Generate cover letter</h2>
+    <div class = "heading">
+    <div id = "title"><h2>Cover Letter Generator</h2></div>
+    <div id = "form">
          <form>
             <h3>Name:</h3>
-             <input type="text" name="name">
+             <input id= "box"type="text" name="name">
          <br>
              <h3>Experience:</h3>
-             <textarea name="paragraph_text" cols="50" rows="10"></textarea>
+             <textarea id = "large_box" name="paragraph_text" cols="50" rows="10"></textarea>
         <br>
         <br>
-        <button>Generate</button>
-      </form>
+        </form>
+    </div>
+    <div class = "heading" ><button>Generate</button></div>
     </div>
 </body>
 </html>
