@@ -28,7 +28,6 @@
         var activeTab = tabs[0];
         var url = activeTab.url;
         console.log(url);
-
       }
     });
   }
@@ -38,27 +37,83 @@
   });
   
   getActiveTabUrl();
-
-  //To get the text on the page
+  
+  // To get the text on the page
   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (changeInfo.status === 'complete') {
       chrome.scripting.executeScript(
         {
           target: { tabId: tabId },
-          function: getPageText,
+          function: getJobText,
         },
-        function (result) {
+        function(result) {
           if (result && result.length > 0) {
             var pageText = result[0].result;
-            console.log(pageText);
-  
+            console.log("Job description:"+ pageText);
           }
         }
       );
     }
   });
   
-  function getPageText() {
-    return document.body.innerText;
+  // chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  //   if (changeInfo.status === 'complete') {
+  //     chrome.scripting.executeScript(
+  //       {
+  //         target: { tabId: tabId },
+  //         function: function() {
+  //           var jobText = getJobText();
+  //           var skillsText = getSkillsText();
+  //           var aboutText = getAboutCompanyText();
+  //           return { jobText, skillsText, aboutText };
+  //         },
+  //       },
+  //       function(result) {
+  //         if (result && result.length > 0) {
+  //           var { jobText, skillsText, aboutText } = result[0].result;
+  //           console.log("Job description: " + jobText);
+  //           console.log("Skills: " + skillsText);
+  //           console.log("About the company: " + aboutText);
+  //    
+  //       }
+  //     );
+  //   }
+  // });
+  
+
+  // returns job description
+  function getJobText() {
+    let descriptionElement = document.querySelector("[class*=job-description]");
+    if (descriptionElement) {
+      return descriptionElement.innerText;
+    } else {
+      return "Nothing's retrieved";
+    }
   }
+
+  // returns the skills listed on job site
+  function getSkillsText(){
+    let skillsElement = document.querySelector("[class*=skills]");
+    if (skillsElement){
+      return skillsElement.innerText;
+    } else {
+      return "No skills retrieved"
+    }
+  }
+
+  // returns company info listed
+  function getAboutCompanyText(){
+    let aboutElement = document.querySelector("[class*=about]");
+    if (aboutElement){
+      return aboutElement.innerText
+    } else {
+      return "No about the company retreived"
+    }
+  }
+
+
+  // function getPageText() {
+  //    return document.body.innerText;
+  //  }
+  
   
