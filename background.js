@@ -38,7 +38,7 @@
   
   getActiveTabUrl();
   
-  // To get the text on the page
+ // To get the text on the page
   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (changeInfo.status === 'complete') {
       chrome.scripting.executeScript(
@@ -49,7 +49,7 @@
         function(result) {
           if (result && result.length > 0) {
             var pageText = result[0].result;
-            console.log("Job description:"+ pageText);
+            console.log("Job description: "+ pageText);
           }
         }
       );
@@ -74,9 +74,9 @@
   //           console.log("Job description: " + jobText);
   //           console.log("Skills: " + skillsText);
   //           console.log("About the company: " + aboutText);
-  //    
+     
   //       }
-  //     );
+  //   });
   //   }
   // });
   
@@ -91,23 +91,23 @@
     }
   }
 
-  // returns the skills listed on job site
+ //returns the skills listed on job site
   function getSkillsText(){
     let skillsElement = document.querySelector("[class*=skills]");
     if (skillsElement){
       return skillsElement.innerText;
     } else {
-      return "No skills retrieved"
+      return "No skills retrieved";
     }
   }
 
-  // returns company info listed
+  //returns company info listed
   function getAboutCompanyText(){
     let aboutElement = document.querySelector("[class*=about]");
     if (aboutElement){
-      return aboutElement.innerText
+      return aboutElement.innerText;
     } else {
-      return "No about the company retreived"
+      return "No about the company retreived";
     }
   }
 
