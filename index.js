@@ -63,9 +63,6 @@ document.addEventListener("DOMContentLoaded", function() {
       })
       .catch(err => console.error(err));
   });
-
-
-     //generate cover letter on click. 
 });
    
 

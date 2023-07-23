@@ -12,6 +12,5 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
     getActiveTabUrl();
 });
   
-
-  getActiveTabUrl();
+getActiveTabUrl();
 
