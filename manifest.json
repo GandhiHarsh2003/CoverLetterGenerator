@@ -4,7 +4,7 @@
     "description": "This is an extension to generate a cover letter based on work experience and job description.",
     "manifest_version": 3,
     "author": "Harsh Gandhi, Kevin Rodriguez, Momoreoluwa Ayinde ",
-    "permissions": ["activeTab", "scripting", "tabs"],
+    "permissions": ["activeTab", "scripting", "tabs", "declarativeContent"],
     "host_permissions": [
         "*://*/*"
       ],
@@ -24,7 +24,7 @@
         "16": "images/icon16.png",
         "48": "images/icon48.png",
         "128": "images/icon128.png"
-    }
+    } 
 }
 
 
