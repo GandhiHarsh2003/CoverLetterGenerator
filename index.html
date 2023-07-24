@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cover Letter Generator</title>
     <link rel="stylesheet" href="popup.css">
+    <script src="popup.js" type="module"></script>
     <script src="index.js" type = "module"></script>
 </head>
 <span id='close'>X</span>
@@ -13,6 +14,19 @@
     <div class = "heading">
     <div id = "title"><h2>Cover Letter Generator</h2></div>
     <div id = "form">
+         <form>
+            <h3>Name:</h3>
+             <input id= "nameInput" type="text" name="name">
+         <br>
+             <h3>Experience:</h3>
+             <textarea id = "experienceInput" name="paragraph_text" cols="50" rows="10"></textarea>
+        <br>
+        <br>
+        </form>
+    </div>
+    <div class = "heading" >
+        <button id="generateButton">Generate</button>
+    </div>
         <h3>Enter Job Title and Company Name (i.e General Custodian, Company):</h3>
         <input type="text" id= "box">
         <h3>Please submit your Resume/CV (.doc, .docx, .pdf  ONLY) </h3>
@@ -20,7 +34,6 @@
     </div>
     <div id = "submit" ><button>Generate Cover Letter</button></div>
     </div>
-
     
 </body>
 </html>
