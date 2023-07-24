@@ -23,65 +23,21 @@
 
   //To get the url of the page
 
-  function getActiveTabUrl() {
+function getActiveTabUrl() {
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
       if (tabs && tabs.length > 0) {
-        var activeTab = tabs[0];
-        var url = activeTab.url;
+        let activeTab = tabs[0];
+        let url = activeTab.url;
         console.log(url);
       }
     });
-  }
+}
   
-  chrome.tabs.onActivated.addListener(function(activeInfo) {
+chrome.tabs.onActivated.addListener(function(activeInfo) {
     getActiveTabUrl();
-  });
+});
   
-  getActiveTabUrl();
-  
- // To get the text on the page
-  chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    if (changeInfo.status === 'complete') {
-      chrome.scripting.executeScript(
-        {
-          target: { tabId: tabId },
-          function: getJobText,
-        },
-        function(result) {
-          if (result && result.length > 0) {
-            var pageText = result[0].result;
-            console.log("Job description: "+ pageText);
-          }
-        }
-      );
-    }
-  });
-  
-  // chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  //   if (changeInfo.status === 'complete') {
-  //     chrome.scripting.executeScript(
-  //       {
-  //         target: { tabId: tabId },
-  //         function: function() {
-  //           var jobText = getJobText();
-  //           var skillsText = getSkillsText();
-  //           var aboutText = getAboutCompanyText();
-  //           return { jobText, skillsText, aboutText };
-  //         },
-  //       },
-  //       function(result) {
-  //         if (result && result.length > 0) {
-  //           var { jobText, skillsText, aboutText } = result[0].result;
-  //           console.log("Job description: " + jobText);
-  //           console.log("Skills: " + skillsText);
-  //           console.log("About the company: " + aboutText);
-     
-  //       }
-  //   });
-  //   }
-  // });
-  
-
+getActiveTabUrl();
   // returns job description
   function getJobText() {
     let descriptionElement = document.querySelector("[class*=job-description]");
@@ -116,7 +72,3 @@
   // function getPageText() {
   //    return document.body.innerText;
   //  }
-  
-  
-  
-  

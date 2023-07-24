@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Extension</title>
+    <title>Cover Letter Generator</title>
     <link rel="stylesheet" href="popup.css">
-    <script src="index.js"></script>
     <script src="popup.js" type="module"></script>
+    <script src="index.js" type = "module"></script>
 </head>
 <span id='close'>X</span>
 <body>
@@ -27,6 +27,13 @@
     <div class = "heading" >
         <button id="generateButton">Generate</button>
     </div>
+        <h3>Enter Job Title and Company Name (i.e General Custodian, Company):</h3>
+        <input type="text" id= "box">
+        <h3>Please submit your Resume/CV (.doc, .docx, .pdf  ONLY) </h3>
+        <input type="file" id="resumeFile" accept=".doc, .docx, .pdf">
     </div>
+    <div id = "submit" ><button>Generate Cover Letter</button></div>
+    </div>
+    
 </body>
 </html>
