@@ -20,8 +20,9 @@
   //     chrome.action.disable(tabId);
   //   }
   // });
-  
+
   //To get the url of the page
+
   function getActiveTabUrl() {
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
       if (tabs && tabs.length > 0) {
@@ -115,5 +116,7 @@
   // function getPageText() {
   //    return document.body.innerText;
   //  }
+  
+  
   
   

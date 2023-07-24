@@ -7,6 +7,7 @@
     <title>Web Extension</title>
     <link rel="stylesheet" href="popup.css">
     <script src="index.js"></script>
+    <script src="popup.js" type="module"></script>
 </head>
 <span id='close'>X</span>
 <body>
@@ -15,15 +16,17 @@
     <div id = "form">
          <form>
             <h3>Name:</h3>
-             <input id= "box"type="text" name="name">
+             <input id= "nameInput" type="text" name="name">
          <br>
              <h3>Experience:</h3>
-             <textarea id = "large_box" name="paragraph_text" cols="50" rows="10"></textarea>
+             <textarea id = "experienceInput" name="paragraph_text" cols="50" rows="10"></textarea>
         <br>
         <br>
         </form>
     </div>
-    <div class = "heading" ><button>Generate</button></div>
+    <div class = "heading" >
+        <button id="generateButton">Generate</button>
+    </div>
     </div>
 </body>
 </html>
