@@ -1,4 +1,4 @@
-import { APIKEY, apikey, openAiKey } from './apikey.js';
+import { APIKEY, apikey, openAiKey } from './apis.js';
 
 var overallResume = ""
 document.addEventListener("DOMContentLoaded", function () {

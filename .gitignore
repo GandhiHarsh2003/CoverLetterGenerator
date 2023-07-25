@@ -1,5 +1,4 @@
 keys.js
-./apikey.js
 .vscode
 .project
 .classpath
@@ -12,4 +11,5 @@ bin/
 out/
 .metadata/.*
 .env
+apis.js
 
