@@ -52,7 +52,7 @@ async function generateCoverLetter(name, experience) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer api key", // Replace with your OpenAI API key
+      "Authorization": "Bearer api key",
     },
     body: JSON.stringify(requestBody),
   });

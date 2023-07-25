@@ -1,7 +1,6 @@
 keys.js
-apiKey.js
+./apikey.js
 .vscode
-apiKey.js
 .project
 .classpath
 *.class

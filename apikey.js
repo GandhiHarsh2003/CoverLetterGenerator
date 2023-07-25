@@ -1,2 +1,4 @@
-const APIKEY = '116addc457msh4580296aaa39d98p191d68jsn904ccd158204';
-export default APIKEY;
+let APIKEY = '3';
+let apikey = '2';
+let openAiKey = '1';
+export { APIKEY, apikey, openAiKey };
