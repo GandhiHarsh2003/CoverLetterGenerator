@@ -11,4 +11,5 @@ bin/
 .DS_Store
 out/
 .metadata/.*
+.env
 
