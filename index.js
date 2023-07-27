@@ -2,11 +2,6 @@ import { APIKEY, apikey, openAiKey } from './apis.js';
 
 var overallResume = ""
 document.addEventListener("DOMContentLoaded", function () {
-  const closeButton = document.getElementById("close");
-  closeButton.addEventListener("click", function () {
-    chrome.extension.getViews({ type: "popup" })[0].close();
-  });
-
   const url = "https://docwire-doctotext.p.rapidapi.com/extract_text";
   const doc = document.getElementById("resumeFile");
   doc.onchange = async () => {
@@ -44,6 +39,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const submitButton = document.getElementById("submit");
   submitButton.addEventListener("click", function () {
+    const loadingText = document.getElementById("loading");
+    loadingText.style.display = "block";
+
     let value = document.getElementById("box").value;
     console.log("value: " + value);
 
@@ -56,8 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(response);
         const jobDescription = response.data[0].job_description;
         const qualifications = response.data[0].job_highlights.Qualifications;
-        const responsibilities =
-          response.data[0].job_highlights.Responsibilities;
+        const responsibilities = response.data[0].job_highlights.Responsibilities;
         console.log(jobDescription);
         console.log(qualifications);
         console.log(responsibilities);
@@ -65,6 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const response2 = await generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume)
         const content = response2.choices[0].message.content;
         console.log(content)
+        loadingText.style.display = "none";
         await generateAndDownloadPDF(content)
       })
       .catch((err) => console.error(err));
@@ -74,18 +72,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function generateAndDownloadPDF(content) {
   const newWindow = window.open("", "", "width=600,height=600");
-  newWindow.document.write(`<pre>${content}</pre>`);
+  const cssStyle = `
+    <style>
+      pre {
+        font-family: 'Times New Roman', Times, serif; /* Set the font-family to Times New Roman */
+        white-space: pre-wrap;
+      }
+    </style>
+  `;
+  newWindow.document.write(`${cssStyle}<pre>${content}</pre>`);
   newWindow.document.close();
-
   await new Promise((resolve) => {
     newWindow.onload = resolve;
   });
-
   newWindow.print();
-
-  setTimeout(() => {
-    newWindow.close();
-  }, 100);
 }
 
 async function generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume) {
@@ -102,10 +102,19 @@ async function generateCoverLetter(jobDescription, qualifications, responsibilit
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${openAiKey}`, // Replace 'openAiKey' with your actual OpenAI API key
+      "Authorization": `Bearer ${openAiKey}`,
     },
     body: JSON.stringify(requestBody),
   });
 
   return response.json();
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+  var closeButton = document.getElementById("close");
+
+  closeButton.addEventListener("click", function() {
+    chrome.extension.getViews({ type: "popup" })[0].close();
+  });
+
+});
