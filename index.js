@@ -65,28 +65,51 @@ document.addEventListener("DOMContentLoaded", function () {
         const response2 = await generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume)
         const content = response2.choices[0].message.content;
         console.log(content)
-        await generateAndDownloadPDF(content)
+        generateDocxFile(content, "CoverLetter.docx")
       })
       .catch((err) => console.error(err));
   });
 });
 
-
-async function generateAndDownloadPDF(content) {
-  const newWindow = window.open("", "", "width=600,height=600");
-  newWindow.document.write(`<pre>${content}</pre>`);
-  newWindow.document.close();
-
-  await new Promise((resolve) => {
-    newWindow.onload = resolve;
-  });
-
-  newWindow.print();
-
-  setTimeout(() => {
-    newWindow.close();
-  }, 100);
+//generates but old doc format
+async function generateAndDownloadWordDoc(content, fileName) {
+  const blob = new Blob([content], { type: "application/msword" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName; // Set the desired filename for the download
+  a.click();
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  URL.revokeObjectURL(url);
+  a.remove();
 }
+
+//generates it but bad file
+async function generateDocxFile(content, filename) {
+  const sanitizedContent = content.replace(/\n/g, "<w:br/>");
+  const docxContent = `
+    <?xml version="1.0" encoding="UTF-8"?>
+    <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+      <w:body>
+        <w:p>
+          <w:r>
+            <w:t>${sanitizedContent}</w:t>
+          </w:r>
+        </w:p>
+      </w:body>
+    </w:document>
+  `;
+  const blob = await (await fetch(URL.createObjectURL(new Blob([docxContent], {
+    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  })))).blob();
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
 
 async function generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume) {
 

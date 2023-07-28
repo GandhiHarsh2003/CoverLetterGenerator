@@ -1,5 +1,5 @@
 {
-    "name": "Cover Letter Genrator",
+    "name": "Cover Letter Generator",
     "version": "1.0.0",
     "description": "This is an extension to generate a cover letter based on work experience and job description.",
     "manifest_version": 3,
