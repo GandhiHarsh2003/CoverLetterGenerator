@@ -1,4 +1,7 @@
 import { APIKEY, apikey, openAiKey } from './apis.js';
+const officegen = require('officegen');
+const fs = require('fs');
+const docx = officegen('docx');
 
 let overallResume = "";
 document.addEventListener("DOMContentLoaded", function () {
@@ -41,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
   submitButton.addEventListener("click", function () {
     const loadingText = document.getElementById("loading");
     loadingText.style.display = "block";
+    const additionalExperience = document.getElementById("large_box").value;
 
     let value = document.getElementById("box").value;
     console.log("value: " + value);
@@ -59,15 +63,23 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(qualifications);
         console.log(responsibilities);
 
-        const response2 = await generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume)
+        const response2 = await generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume, additionalExperience)
         const content = response2.choices[0].message.content;
         console.log(content)
         loadingText.style.display = "none";
-        await generateAndDownloadPDF(content)
+        await test(content);
       })
       .catch((err) => console.error(err));
   });
 });
+
+async function test(content){
+  const p = docx.createP();
+  p.addText(content);
+  const out = fs.createWriteStream("CoverLetter.docx");
+  docx.generate(out);
+}
+
 
 //generates but old doc format
 async function generateAndDownloadWordDoc(content, fileName) {
@@ -130,10 +142,10 @@ async function generateDocxFile(content, filename) {
 }
 
 
-async function generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume) {
+async function generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume, additionalExperience) {
 
-  const details = "Create a tailored cover letter that highlights the most relevant skills and experiences from this job description and resume. It should not be more than 500 worlds";
-  const prompt = details + "Job description is " + jobDescription + "Qualification needed are " + qualifications + " responsibilities are " + responsibilities + " my resume is " + overallResume;
+  const details = "Create a tailored cover letter that highlights the most relevant skills and experiences from this job description and resume. It should not be more than 500 words";
+  const prompt = details + "Job description is " + jobDescription + "Qualification needed are " + qualifications + " responsibilities are " + responsibilities + " my resume is " + overallResume + ". Other things to include are:  " + additionalExperience;
 
   const requestBody = {
     model: "gpt-3.5-turbo",

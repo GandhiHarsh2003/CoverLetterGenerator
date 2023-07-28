@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "officegen": "github:ziv-Barber/officegen#master"
+  }
+}

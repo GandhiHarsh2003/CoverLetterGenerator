@@ -27,6 +27,19 @@ h3 {
     white-space: nowrap;
 }
 
+.optional-text {
+    color: red;
+}
+
+#large_box{
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-family: 'Times New Roman', Times, serif;
+}
+
 button {
     background-color:#4c7989;
     display: inline-block;
