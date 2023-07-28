@@ -16,7 +16,7 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 getActiveTabUrl();
 
 // Incase we ever need to get the job description differently
-  // To get the text on the page
+// To get the text on the page
 //   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 //     if (changeInfo.status === 'complete') {
 //       chrome.scripting.executeScript(

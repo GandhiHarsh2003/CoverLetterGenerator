@@ -1,7 +1,7 @@
 {
     "name": "Cover Letter Generator",
     "version": "1.0.0",
-    "description": "This is an extension to generate a cover letter based on work experience and job description.",
+    "description": "This extension generates a cover letter based on the individual's professional experience",
     "manifest_version": 3,
     "author": "Harsh Gandhi, Kevin Rodriguez, Momoreoluwa Ayinde ",
       "permissions": ["storage", "activeTab", "scripting", "tabs", "tabGroups","declarativeContent"],
