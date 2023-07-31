@@ -1,7 +1,4 @@
 import { APIKEY, apikey, openAiKey } from './apis.js';
-const officegen = require('officegen');
-const fs = require('fs');
-const docx = officegen('docx');
 
 let overallResume = "";
 document.addEventListener("DOMContentLoaded", function () {
@@ -67,39 +64,19 @@ document.addEventListener("DOMContentLoaded", function () {
         const content = response2.choices[0].message.content;
         console.log(content)
         loadingText.style.display = "none";
-        await test(content);
+        await generateAndDownloadPDF(content);
       })
       .catch((err) => console.error(err));
   });
 });
 
-async function test(content){
-  const p = docx.createP();
-  p.addText(content);
-  const out = fs.createWriteStream("CoverLetter.docx");
-  docx.generate(out);
-}
-
-
-//generates but old doc format
-async function generateAndDownloadWordDoc(content, fileName) {
-  const blob = new Blob([content], { type: "application/msword" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = fileName; // Set the desired filename for the download
-  a.click();
-  await new Promise((resolve) => setTimeout(resolve, 100));
-  URL.revokeObjectURL(url);
-  a.remove();
-}
-
+//Working
 async function generateAndDownloadPDF(content) {
   const newWindow = window.open("", "", "width=600,height=600");
   const cssStyle = `
     <style>
       pre {
-        font-family: 'Times New Roman', Times, serif; /* Set the font-family to Times New Roman */
+        font-family: 'Times New Roman', Times, serif;
         white-space: pre-wrap;
       }
     </style>
@@ -115,37 +92,41 @@ async function generateAndDownloadPDF(content) {
   newWindow.close();
 }
 
+//generates but old doc format
+async function generateAndDownloadWordDoc(content, fileName) {
+  const blob = new Blob([content], { type: "application/msword" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  a.click();
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  URL.revokeObjectURL(url);
+  a.remove();
+}
+
 
 //generates it but bad file
-async function generateDocxFile(content, filename) {
-  const sanitizedContent = content.replace(/\n/g, "<w:br/>");
-  const docxContent = `
-    <?xml version="1.0" encoding="UTF-8"?>
-    <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-      <w:body>
-        <w:p>
-          <w:r>
-            <w:t>${sanitizedContent}</w:t>
-          </w:r>
-        </w:p>
-      </w:body>
-    </w:document>`;
-  const blob = await (await fetch(URL.createObjectURL(new Blob([docxContent], {
-    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-  })))).blob();
+function saveAsDocx(content, filename) {
+  const blob = new Blob([content], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+  const url = URL.createObjectURL(blob);
 
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(a.href);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
 
 
 async function generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume, additionalExperience) {
 
   const details = "Create a tailored cover letter that highlights the most relevant skills and experiences from this job description and resume. It should not be more than 500 words";
-  const prompt = details + "Job description is " + jobDescription + "Qualification needed are " + qualifications + " responsibilities are " + responsibilities + " my resume is " + overallResume + ". Other things to include are:  " + additionalExperience;
+  const prompt = details + "Job description is " + jobDescription + "Qualification needed are " + qualifications + " responsibilities are " + responsibilities + " my resume is " + overallResume + ". Other things to inlude are:  " + additionalExperience;
 
   const requestBody = {
     model: "gpt-3.5-turbo",
