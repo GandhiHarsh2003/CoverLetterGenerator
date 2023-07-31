@@ -1,4 +1,3 @@
-//To get the url of the page
 function getActiveTabUrl() {
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
       if (tabs && tabs.length > 0) {
@@ -14,6 +13,14 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 });
   
 getActiveTabUrl();
+
+chrome.action.onClicked.addListener(tab => {
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ['index.js']
+  });
+});
+
 
 // Incase we ever need to get the job description differently
 // To get the text on the page

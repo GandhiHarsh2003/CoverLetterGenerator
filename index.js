@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
   submitButton.addEventListener("click", function () {
     const loadingText = document.getElementById("loading");
     loadingText.style.display = "block";
+    const additionalExperience = document.getElementById("large_box").value;
 
     let value = document.getElementById("box").value;
     console.log("value: " + value);
@@ -59,35 +60,23 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(qualifications);
         console.log(responsibilities);
 
-        const response2 = await generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume)
+        const response2 = await generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume, additionalExperience)
         const content = response2.choices[0].message.content;
         console.log(content)
         loadingText.style.display = "none";
-        await generateAndDownloadPDF(content)
+        await generateAndDownloadPDF(content);
       })
       .catch((err) => console.error(err));
   });
 });
 
-//generates but old doc format
-async function generateAndDownloadWordDoc(content, fileName) {
-  const blob = new Blob([content], { type: "application/msword" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = fileName; // Set the desired filename for the download
-  a.click();
-  await new Promise((resolve) => setTimeout(resolve, 100));
-  URL.revokeObjectURL(url);
-  a.remove();
-}
-
+//Working
 async function generateAndDownloadPDF(content) {
   const newWindow = window.open("", "", "width=600,height=600");
   const cssStyle = `
     <style>
       pre {
-        font-family: 'Times New Roman', Times, serif; /* Set the font-family to Times New Roman */
+        font-family: 'Times New Roman', Times, serif;
         white-space: pre-wrap;
       }
     </style>
@@ -103,37 +92,41 @@ async function generateAndDownloadPDF(content) {
   newWindow.close();
 }
 
-
-//generates it but bad file
-async function generateDocxFile(content, filename) {
-  const sanitizedContent = content.replace(/\n/g, "<w:br/>");
-  const docxContent = `
-    <?xml version="1.0" encoding="UTF-8"?>
-    <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-      <w:body>
-        <w:p>
-          <w:r>
-            <w:t>${sanitizedContent}</w:t>
-          </w:r>
-        </w:p>
-      </w:body>
-    </w:document>`;
-  const blob = await (await fetch(URL.createObjectURL(new Blob([docxContent], {
-    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-  })))).blob();
-
+//generates but old doc format
+async function generateAndDownloadWordDoc(content, fileName) {
+  const blob = new Blob([content], { type: "application/msword" });
+  const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
+  a.href = url;
+  a.download = fileName;
   a.click();
-  URL.revokeObjectURL(a.href);
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  URL.revokeObjectURL(url);
+  a.remove();
 }
 
 
-async function generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume) {
+//generates it but bad file
+function saveAsDocx(content, filename) {
+  const blob = new Blob([content], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+  const url = URL.createObjectURL(blob);
 
-  const details = "Create a tailored cover letter that highlights the most relevant skills and experiences from this job description and resume. It should not be more than 500 worlds";
-  const prompt = details + "Job description is " + jobDescription + "Qualification needed are " + qualifications + " responsibilities are " + responsibilities + " my resume is " + overallResume;
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+
+async function generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume, additionalExperience) {
+
+  const details = "Create a tailored cover letter that highlights the most relevant skills and experiences from this job description and resume. It should not be more than 500 words";
+  const prompt = details + "Job description is " + jobDescription + "Qualification needed are " + qualifications + " responsibilities are " + responsibilities + " my resume is " + overallResume + ". Other things to inlude are:  " + additionalExperience;
 
   const requestBody = {
     model: "gpt-3.5-turbo",
