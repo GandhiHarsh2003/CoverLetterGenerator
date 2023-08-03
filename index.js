@@ -84,32 +84,35 @@ document.addEventListener("DOMContentLoaded", function () {
     const loadingText = document.getElementById("loading");
     if(checkInputs()){
       loadingText.style.display = "block";
+      const additionalExperience = document.getElementById("large_box").value;
+
+      let boxValue = boxInput.value;
+      const query = encodeURIComponent(boxValue);
+  
+      const urlQuery = `https://jsearch.p.rapidapi.com/search?query=${query}`;
+      fetch(urlQuery, optionss)
+        .then((response) => response.json())
+        .then(async (response) => {
+          console.log(response);
+          const jobDescription = response.data[0].job_description;
+          const qualifications = response.data[0].job_highlights.Qualifications;
+          const responsibilities = response.data[0].job_highlights.Responsibilities;
+          console.log(jobDescription);
+          console.log(qualifications);
+          console.log(responsibilities);
+  
+          const response2 = await generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume, additionalExperience)
+          const content = response2.choices[0].message.content;
+          loadingText.style.display = "none";
+          await generateAndDownloadPDF(content);
+        })
+        .catch((err) => console.error(err));
+      
+    } else {
+      alert('Please fill in the fields');
       return;
-    } 
+    }
     
-    const additionalExperience = document.getElementById("large_box").value;
-
-    let boxValue = boxInput.value;
-    const query = encodeURIComponent(boxValue);
-
-    const urlQuery = `https://jsearch.p.rapidapi.com/search?query=${query}`;
-    fetch(urlQuery, optionss)
-      .then((response) => response.json())
-      .then(async (response) => {
-        console.log(response);
-        const jobDescription = response.data[0].job_description;
-        const qualifications = response.data[0].job_highlights.Qualifications;
-        const responsibilities = response.data[0].job_highlights.Responsibilities;
-        console.log(jobDescription);
-        console.log(qualifications);
-        console.log(responsibilities);
-
-        const response2 = await generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume, additionalExperience)
-        const content = response2.choices[0].message.content;
-        loadingText.style.display = "none";
-        await generateAndDownloadPDF(content);
-      })
-      .catch((err) => console.error(err));
   });
 });
 
