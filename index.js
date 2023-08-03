@@ -1,4 +1,4 @@
-import { APIKEY, apikey, openAiKey } from './apis.js';
+import { jobApikey, resumeApikey, openAiKey } from './apis.js';
 
 let overallResume = "";
 document.addEventListener("DOMContentLoaded", function () {
@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const options = {
       method: "POST",
       headers: {
-        "X-RapidAPI-Key": apikey,
+        "X-RapidAPI-Key": resumeApikey,
         "X-RapidAPI-Host": "docwire-doctotext.p.rapidapi.com",
       },
       body: data,
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const optionss = {
     method: "GET",
     headers: {
-      "X-RapidAPI-Key": APIKEY,
+      "X-RapidAPI-Key": jobApikey,
       "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
     },
   };
