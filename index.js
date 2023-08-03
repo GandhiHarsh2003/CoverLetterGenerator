@@ -97,9 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const jobDescription = response.data[0].job_description;
           const qualifications = response.data[0].job_highlights.Qualifications;
           const responsibilities = response.data[0].job_highlights.Responsibilities;
-          console.log(jobDescription);
-          console.log(qualifications);
-          console.log(responsibilities);
+        
   
           const response2 = await generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume, additionalExperience)
           const content = response2.choices[0].message.content;
