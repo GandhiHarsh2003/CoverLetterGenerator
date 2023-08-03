@@ -1,4 +1,4 @@
-import { APIKEY, apikey, openAiKey } from './apis.js';
+import { jobApikey, resumeApikey, openAiKey } from './apis.js';
 
 let overallResume = "";
 document.addEventListener("DOMContentLoaded", function () {
@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const options = {
       method: "POST",
       headers: {
-        "X-RapidAPI-Key": apikey,
+        "X-RapidAPI-Key": resumeApikey,
         "X-RapidAPI-Host": "docwire-doctotext.p.rapidapi.com",
       },
       body: data,
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const response = await fetch(url, options);
       const result = await response.text();
       overallResume = result
-      console.log(result);
+      // console.log(result);
     } catch (error) {
       console.error(error);
     }
@@ -32,22 +32,66 @@ document.addEventListener("DOMContentLoaded", function () {
   const optionss = {
     method: "GET",
     headers: {
-      "X-RapidAPI-Key": APIKEY,
+      "X-RapidAPI-Key": jobApikey,
       "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
     },
   };
 
-  const submitButton = document.getElementById("submit");
+  const boxInput = document.getElementById("box");
+  const resumeInput = document.getElementById("resumeFile");
+  const submitButton = document.getElementById("generateButton");
+  // helper function for the empty fields 
+  const isEmpty = str => !str || !str.trim().length;
+
+  // enhance check for 1st input field 
+  function checkInputs() {
+    const boxValue = boxInput.value;
+    const resumeValue = resumeInput.files[0];
+    const isBoxEmpty = isEmpty(boxValue);
+    const isResumeEmpty = !resumeValue || resumeValue.size === 0;
+   
+    // If both inputs are empty, disable the button
+    if (isBoxEmpty && isResumeEmpty) {
+      boxInput.classList.add('error');
+      resumeInput.classList.add('error');
+      submitButton.disabled = true;
+    }
+    // If one input has content and the other is empty, disable the button
+    else if (isBoxEmpty || isResumeEmpty) {
+      boxInput.classList.add('error');
+      resumeInput.classList.add('error');
+      submitButton.disabled = true;
+    }
+    // If both inputs have content, check the file content
+    else {
+      if (isEmpty(overallResume)){
+        resumeInput.classList.add('error');
+        boxInput.classList.remove('error');
+        submitButton.disabled = true;
+      } else {
+        resumeInput.classList.remove('error');
+        boxInput.classList.remove('error');
+        submitButton.disabled = false;
+      }
+    }
+    return !isBoxEmpty || !isResumeEmpty;
+  }
+  boxInput.addEventListener("input", checkInputs);
+  resumeInput.addEventListener("change", checkInputs);
+
+
   submitButton.addEventListener("click", function () {
     const loadingText = document.getElementById("loading");
-    loadingText.style.display = "block";
+    if(checkInputs()){
+      loadingText.style.display = "block";
+      return;
+    } 
+    
     const additionalExperience = document.getElementById("large_box").value;
 
-    let value = document.getElementById("box").value;
-    console.log("value: " + value);
+    let boxValue = boxInput.value;
+    const query = encodeURIComponent(boxValue);
 
-    const query = encodeURIComponent(value);
-    console.log("Encoded query:", query);
     const urlQuery = `https://jsearch.p.rapidapi.com/search?query=${query}`;
     fetch(urlQuery, optionss)
       .then((response) => response.json())
@@ -62,7 +106,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const response2 = await generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume, additionalExperience)
         const content = response2.choices[0].message.content;
-        console.log(content)
         loadingText.style.display = "none";
         await generateAndDownloadPDF(content);
       })
