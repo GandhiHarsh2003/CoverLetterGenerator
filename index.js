@@ -68,7 +68,8 @@ document.addEventListener("DOMContentLoaded", function () {
         resumeInput.classList.add('error');
         boxInput.classList.remove('error');
         submitButton.disabled = true;
-      } else {
+      } 
+      else {
         resumeInput.classList.remove('error');
         boxInput.classList.remove('error');
         submitButton.disabled = false;
@@ -76,8 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     return !isBoxEmpty || !isResumeEmpty;
   }
-  boxInput.addEventListener("input", checkInputs);
-  resumeInput.addEventListener("change", checkInputs);
 
 
   submitButton.addEventListener("click", function () {
