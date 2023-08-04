@@ -1,12 +1,20 @@
-import { jobApikey, resumeApikey, openAiKey } from './apis.js';
+import { jobApikey, resumeApikey, openAiKey } from './apis.js';
 
 let overallResume = "";
 document.addEventListener("DOMContentLoaded", function () {
+  const h3 = document.getElementById("additionalExperience");
+  const textareaContainer = document.getElementById("textareaContainer");
+
+  h3.addEventListener("click", function () {
+    textareaContainer.style.display = textareaContainer.style.display === "none" ? "block" : "none";
+    h3.classList.toggle("clicked");
+  });
+
   const url = "https://docwire-doctotext.p.rapidapi.com/extract_text";
   const doc = document.getElementById("resumeFile");
   doc.onchange = async () => {
     const selectedFile = doc.files[0];
-    console.log("Selected file name:", selectedFile.name);
+    // console.log("Selected file name:", selectedFile.name);
     const data = new FormData();
     data.append("file", selectedFile);
     data.append("filename", selectedFile.name);
@@ -23,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const response = await fetch(url, options);
       const result = await response.text();
       overallResume = result
-      console.log(result);
+      // console.log(result);
     } catch (error) {
       console.error(error);
     }
@@ -37,36 +45,124 @@ document.addEventListener("DOMContentLoaded", function () {
     },
   };
 
-  const submitButton = document.getElementById("submit");
+  const boxInput = document.getElementById("box");
+  const resumeInput = document.getElementById("resumeFile");
+  const submitButton = document.getElementById("generateButton");
+  const submitButtonResume = document.getElementById("generateButtonResume");
+  // helper function for the empty fields 
+  const isEmpty = str => !str || !str.trim().length;
+
+  // enhance check for 1st input field 
+  function checkInputs() {
+    const boxValue = boxInput.value;
+    const resumeValue = resumeInput.files[0];
+    const isBoxEmpty = isEmpty(boxValue);
+    const isResumeEmpty = !resumeValue || resumeValue.size === 0;
+   
+    // If both inputs are empty, disable the button
+    if (isBoxEmpty && isResumeEmpty) {
+      boxInput.classList.add('error');
+      resumeInput.classList.add('error');
+      submitButton.disabled = true;
+      submitButtonResume.disabled = true;
+    }
+    // If one input has content and the other is empty, disable the button
+    else if (isBoxEmpty || isResumeEmpty) {
+      boxInput.classList.add('error');
+      resumeInput.classList.add('error');
+      submitButton.disabled = true;
+      submitButtonResume.disabled = true;
+    }
+    // If both inputs have content, check the file content
+    else {
+      if (isEmpty(overallResume)){
+        resumeInput.classList.add('error');
+        boxInput.classList.remove('error');
+        submitButton.disabled = true;
+        submitButtonResume.disabled = true;
+      } else {
+        resumeInput.classList.remove('error');
+        boxInput.classList.remove('error');
+        submitButton.disabled = false;
+        submitButtonResume.disabled = false;
+      }
+    }
+    return !isBoxEmpty || !isResumeEmpty;
+  }
+
+  function disableOtherButton(button) {
+    if (button === submitButton) {
+      submitButtonResume.disabled = true;
+    } else if (button === submitButtonResume) {
+      submitButton.disabled = true;
+    }
+  }
+
   submitButton.addEventListener("click", function () {
+    disableOtherButton(submitButtonResume);
     const loadingText = document.getElementById("loading");
-    loadingText.style.display = "block";
-    const additionalExperience = document.getElementById("large_box").value;
+    if(checkInputs()){
+      loadingText.style.display = "block";
+      const additionalExperience = document.getElementById("large_box").value;
 
-    let value = document.getElementById("box").value;
-    console.log("value: " + value);
+      let boxValue = boxInput.value;
+      const query = encodeURIComponent(boxValue);
+  
+      const urlQuery = `https://jsearch.p.rapidapi.com/search?query=${query}`;
+      fetch(urlQuery, optionss)
+        .then((response) => response.json())
+        .then(async (response) => {
+          console.log(response);
+          const jobDescription = response.data[0].job_description;
+          const qualifications = response.data[0].job_highlights.Qualifications;
+          const responsibilities = response.data[0].job_highlights.Responsibilities;
+        
+  
+          const response2 = await generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume, additionalExperience)
+          const content = response2.choices[0].message.content;
+          loadingText.style.display = "none";
+          await generateAndDownloadPDF(content);
+        })
+        .catch((err) => console.error(err));
+      
+    } else {
+      alert('Please fill in the fields');
+      return;
+    }
+    
+  });
 
-    const query = encodeURIComponent(value);
-    console.log("Encoded query:", query);
-    const urlQuery = `https://jsearch.p.rapidapi.com/search?query=${query}`;
-    fetch(urlQuery, optionss)
-      .then((response) => response.json())
-      .then(async (response) => {
-        console.log(response);
-        const jobDescription = response.data[0].job_description;
-        const qualifications = response.data[0].job_highlights.Qualifications;
-        const responsibilities = response.data[0].job_highlights.Responsibilities;
-        console.log(jobDescription);
-        console.log(qualifications);
-        console.log(responsibilities);
+  submitButtonResume.addEventListener("click", function () {
+    disableOtherButton(submitButton);
+    const loadingText = document.getElementById("loading");
+    if(checkInputs()){
+      loadingText.style.display = "block";
+      const additionalExperience = document.getElementById("large_box").value;
 
-        const response2 = await generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume, additionalExperience)
-        const content = response2.choices[0].message.content;
-        console.log(content)
-        loadingText.style.display = "none";
-        await generateAndDownloadPDF(content);
-      })
-      .catch((err) => console.error(err));
+      let boxValue = boxInput.value;
+      const query = encodeURIComponent(boxValue);
+  
+      const urlQuery = `https://jsearch.p.rapidapi.com/search?query=${query}`;
+      fetch(urlQuery, optionss)
+        .then((response) => response.json())
+        .then(async (response) => {
+          console.log(response);
+          const jobDescription = response.data[0].job_description;
+          const qualifications = response.data[0].job_highlights.Qualifications;
+          const responsibilities = response.data[0].job_highlights.Responsibilities;
+        
+  
+          const response2 = await generateTailoredResume(jobDescription, qualifications, responsibilities, overallResume, additionalExperience)
+          const content = response2.choices[0].message.content;
+          loadingText.style.display = "none";
+          await generateAndDownloadPDF(content);
+        })
+        .catch((err) => console.error(err));
+      
+    } else {
+      alert('Please fill in the fields');
+      return;
+    }
   });
 });
 
@@ -126,6 +222,28 @@ function saveAsDocx(content, filename) {
 async function generateCoverLetter(jobDescription, qualifications, responsibilities, overallResume, additionalExperience) {
 
   const details = "Create a tailored cover letter that highlights the most relevant skills and experiences from this job description and resume. It should not be more than 500 words";
+  const prompt = details + "Job description is " + jobDescription + "Qualification needed are " + qualifications + " responsibilities are " + responsibilities + " my resume is " + overallResume + ". Other things to inlude are:  " + additionalExperience;
+
+  const requestBody = {
+    model: "gpt-3.5-turbo",
+    messages: [{ role: "user", content: prompt }],
+    temperature: 0.7,
+  };
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${openAiKey}`,
+    },
+    body: JSON.stringify(requestBody),
+  });
+
+  return response.json();
+}
+
+async function generateTailoredResume(jobDescription, qualifications, responsibilities, overallResume, additionalExperience) {
+
+  const details = "Create a tailored resume that matches the job description. It should not be more than one page";
   const prompt = details + "Job description is " + jobDescription + "Qualification needed are " + qualifications + " responsibilities are " + responsibilities + " my resume is " + overallResume + ". Other things to inlude are:  " + additionalExperience;
 
   const requestBody = {
