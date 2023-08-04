@@ -80,7 +80,8 @@ document.addEventListener("DOMContentLoaded", function () {
         boxInput.classList.remove('error');
         submitButton.disabled = true;
         submitButtonResume.disabled = true;
-      } else {
+      } 
+      else {
         resumeInput.classList.remove('error');
         boxInput.classList.remove('error');
         submitButton.disabled = false;
