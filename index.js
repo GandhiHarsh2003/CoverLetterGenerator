@@ -244,8 +244,8 @@ async function generateCoverLetter(jobDescription, qualifications, responsibilit
 
 async function generateTailoredResume(jobDescription, qualifications, responsibilities, overallResume, additionalExperience) {
 
-  const details = "Create a tailored resume that matches the job description. It should not be more than one page";
-  const prompt = details + "Job description is " + jobDescription + "Qualification needed are " + qualifications + " responsibilities are " + responsibilities + " my resume is " + overallResume + ". Other things to inlude are:  " + additionalExperience;
+  const details = "Create a tailored resume that matches the job description and my resume";
+  const prompt = details + "Job description is " + jobDescription  + " my resume is " + overallResume + ". Other things to inlude are:  " + additionalExperience;
 
   const requestBody = {
     model: "gpt-3.5-turbo",
