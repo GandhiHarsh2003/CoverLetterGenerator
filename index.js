@@ -244,8 +244,24 @@ async function generateCoverLetter(jobDescription, qualifications, responsibilit
 
 async function generateTailoredResume(jobDescription, qualifications, responsibilities, overallResume, additionalExperience) {
 
-  const details = "Create a tailored resume that matches the job description and my resume";
+  const details = "Create a tailored resume that precisely matches the job description and my existing resume.I need you to generate a highly effective resume that highlights my skills, experiences, and qualifications, perfectly aligning with the job requirements mentioned in the provided job description. It should emphasize my suitability for the role and how my background makes me an ideal candidate. The resume should ideally address the key points in the job description.I want the resume to be meticulously tailored to stand out to potential employers. It should not only include the details from my current resume but also be optimized to match the language and terminology used in the job description, reflecting my genuine enthusiasm for the role. Feel free to incorporate the additional experience I provided to enhance the resume further. The resulting resume should demonstrate my potential value to the company and my strong alignment with the job requirements, making it a compelling document that increases my chances of securing an interview. Please generate the best possible resume that makes a powerful impression and resonates with the hiring team. Thank you.";
   const prompt = details + "Job description is " + jobDescription  + " my resume is " + overallResume + ". Other things to inlude are:  " + additionalExperience;
+
+  /**
+   *
+I need the AI to generate a highly effective resume that highlights my skills, experiences, and qualifications, perfectly aligning with the job requirements mentioned in the provided job description. It should emphasize my suitability for the role and how my background makes me an ideal candidate.
+
+The resume should ideally address the key points in the job description, showcasing my expertise in areas such as [mention relevant skills/qualities mentioned in the job description].
+
+I want the resume to be meticulously tailored to stand out to potential employers. It should not only include the details from my current resume but also be optimized to match the language and terminology used in the job description, reflecting my genuine enthusiasm for the role.
+
+Feel free to incorporate the additional experience I provided to enhance the resume further.
+
+The resulting resume should demonstrate my potential value to the company and my strong alignment with the job requirements, making it a compelling document that increases my chances of securing an interview.
+
+Please generate the best possible resume that makes a powerful impression and resonates with the hiring team. Thank you.
+
+   */
 
   const requestBody = {
     model: "gpt-3.5-turbo",
