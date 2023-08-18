@@ -131,11 +131,11 @@ input::file-selector-button:hover {
 }
 
 #additionalExperience.clicked {
-    color: #808000; 
+
 }
 
 .optional-text {
-    color: red;
+    color: rgb(186,77,247);
 }
 
 #textareaContainer {
@@ -149,16 +149,17 @@ input::file-selector-button:hover {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 400px;
     padding: 8px;
-    /* font-family: 'SFCompact'; */
+    font-family: 'Spartan';
 }
 
 #large_box{
-    max-width: 500px;
+    max-width: 375px;
     margin: 0 auto;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    /* font-family: 'Times New Roman', Times, serif; */
+    font-family: 'Spartan';
+    border-color: rgb(68, 27, 92);
 }
 
 #submit,
@@ -207,17 +208,21 @@ button:active{
 }
 
 #close {
+    font-family: 'Arial', sans-serif, bold;
+    font-size: 1.5rem;
     float:right;
-    padding:2px 5px;
-    background:#ccc;
+    padding:5px 7px;
     cursor:default;
 }
 
 #close:hover {
     float:right;
-    padding:2px 5px;
-    background:#ccc;
-    color:#fff;
+    /* background:#ccc; */
+    /* color:#fff; */
+    background-image: linear-gradient(rgb(82,118,247), rgb(186,77,247));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transform: scale(1.2);
 }
 
 .error {
