@@ -9,23 +9,30 @@
     <script src="index.js" type="module"></script>
 <body>
     <span id='close'>X</span>
-    <div class="heading">
-        <div id="title"><h2>HiredAI</h2></div>
-        <div id="form">
-            <h3>Enter Job Title and Company Name (i.e General Custodian, Company):</h3>
-            <input type="text" id="box">
-            <h3>Please submit your Resume/CV (.doc, .docx, .pdf ONLY) </h3>
-            <input type="file" id="resumeFile" accept=".doc, .docx, .pdf">
-            <h3 id="additionalExperience">Additional experience you want included <span class="optional-text">(Optional)</span>:</h3>
-            <div id="textareaContainer" style="display: none;">
-                <textarea id="large_box" name="paragraph_text" cols="50" rows="5"></textarea>
+    <div class="titleContainer">
+        <img src="/images/resumeIcon.png" alt="resume">
+        <h2 class="tracking-in-contract">HiredAI</h2>
+    </div>
+    <div class="container">
+        <div class="heading">
+            <div id="form">
+                <h3>Job Title and Company Name:</h3>
+                <h4>(i.e General Custodian, Company)</h4>
+                <input type="text" id="box" style="margin-bottom: .7rem;">
+                <h3>Resume/CV</h3>
+                <h4>(.doc, .docx, .pdf)</h4>
+                <input type="file" id="resumeFile" accept=".doc, .docx, .pdf" style="margin-bottom: .7rem;">
+                <h3 id="additionalExperience">Additional experience you want included <span class="optional-text">(Optional)</span>:</h3>
+                <div id="textareaContainer" style="display: none;">
+                    <textarea id="large_box" name="paragraph_text" cols="50" rows="5"></textarea>
+                </div>
             </div>
+            <div class="button-container">
+                <div id="submit"><button id="generateButton">Generate Cover Letter</button></div>
+                <div id="submitResume"><button id="generateButtonResume">Generate Tailored Resume</button></div>
+            </div>
+            <div id="loading" style="display: none;">Generating...</div>
         </div>
-        <div class="button-container">
-            <div id="submit"><button id="generateButton">Generate Cover Letter</button></div>
-            <div id="submitResume"><button id="generateButtonResume">Generate Tailored Resume</button></div>
-        </div>
-        <div id="loading" style="display: none;">Generating...</div>
     </div>
 </body>
 </html>
